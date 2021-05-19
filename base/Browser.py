@@ -35,7 +35,7 @@ class Browser:
 
     HEADLESS = True   # 默认浏览器无头启动
 
-    def __init__(self, browser_type: Type[Union[Firefox, Chrome, Ie, Edge, Opera, Safari]] = Chrome,
+    def __init__(self, browser_type: Type[Union[Firefox, Chrome, Ie, Edge, Opera, Safari]] = Chrome ,
                  option_type: Type[Union[FirefoxOptions, ChromeOptions, IeOptions]] = ChromeOptions,
                  driver_path: str = CHROME_DRIVER_PATH ):
         """
@@ -44,14 +44,14 @@ class Browser:
         :param option_type:
         :param driver_path:
         """
-        # if not issubclass(browser_type, (Firefox, Chrome, Ie, Edge, Opera, Safari)):
-        #     raise BrowserTypeError(browser_type)
-        #
-        # if not issubclass(option_type, (FirefoxOptions, ChromeOptions, IeOptions)):
-        #     raise BrowserTypeError(option_type)
+        if not issubclass(browser_type, (Firefox, Chrome, Ie, Edge, Opera, Safari)):
+            raise BrowserTypeError(browser_type)
 
-        # if not issubclass(driver_path, str):
-        #     raise TypeError
+        if not issubclass(option_type, (FirefoxOptions, ChromeOptions, IeOptions)):
+            raise  BrowserTypeError(option_type)
+
+        if not issubclass(driver_path, str):
+            raise TypeError
 
         self._path = driver_path
         self._browser = browser_type
@@ -89,11 +89,10 @@ class Chrome(Browser):
 
     EXP = {
         # 关闭chrome正在受到自动化。。。。的提示
-        'excludeSwitches':['enable-automtion']
+        'excludeSwitches':['enable-automtion'],
         # 移动模拟  可做h5测试
         # 'mobileEmulation':{'deviceName':'iPhone6'}
     }
-
 
     @property
     def options(self):
@@ -101,7 +100,7 @@ class Chrome(Browser):
         chrome_option.add_argument(self.START_MAX)  #最大化启动
         # 添加 EXP参数
         for k,v in self.EXP.items():
-            chrome_option.add_experimental_option(k, v)
+            chrome_option.add_experimental_option(k,v)
         chrome_option.headless = self.HEADLESS
         return chrome_option
 
@@ -121,7 +120,6 @@ class Chrome(Browser):
 
 class IE(Browser):
     CLEAN_SESSION = True
-
     def __init__(self):
         super(IE, self).__init__(
             browser_type=Ie,
@@ -148,8 +146,7 @@ class IE(Browser):
 
         return ie
 
-
 if __name__ == '__main__':
-    with Chrome().browser as _chrome:
-        _chrome.get("https://www.baidu.com/")
+    with  Chrome().browser as _chrome:
+        _chrome.get('www.baiu.com')
         sleep(3)

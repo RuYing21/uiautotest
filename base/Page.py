@@ -30,7 +30,7 @@ class Page:
 class CommonLoginPage(Page):
     url = 'www.baidu.com'
     locator = {
-        'username': ('id', 'kw'),
+        'username': ('id', 'eid'),
         'password': ('id', ''),
         'yuchooseBtn':('id',''),
         'loginBtn':('id','')
@@ -51,22 +51,23 @@ class CommonLoginPage(Page):
         self.loginBtn.click()
 
 
-class BusinessPage(CommonLoginPage):
+class ChangePage(CommonLoginPage):
     CommonLoginPage.locator.update({
-        'changeBtn': ('id', 'kw'),
-        'input': ('id', ''),
-        'confim': ('id', '')
+        'changeBtn': ('id', 'changeBtn'),
+        'changeInput': ('id', 'changeInput'),
+        'confimBtn': ('id', 'confimBtn'),
+        'modulelable':('id', 'confimBtn')
     })
 
     def change_module(self, module_id: str = '11744'):
-        self.locator.click()
-        self.input.send_key(input)
-        self.confirm.click()
+        self.changeBtn.click()
+        self.change_input.sen_keys(module_id)
+        self.confirmBtn.click()
 
 
-class TestBussinessPage():
+class TestChangeCPage:
     def test_login(self):
-        page = BusinessPage()
+        page = ChangePage()
         page.get()
         page.login()
         assert page.user_name.text == 'hr003'
@@ -74,15 +75,15 @@ class TestBussinessPage():
         page.driver.quit()
 
     def test_change_module(self):
-        page = BusinessPage()
+        page = ChangePage()
         page.get()
-        page.login()
-        assert page.user_name.text == 'hr003'
-        print('login success')
+        page.change_module()
+        assert page.modulelable.text == '11744'
+        print('change success')
         page.driver.quit()
 
 
 if __name__ == '__main__':
-    obj = TestBussinessPage()
+    obj = TestChangeCPage()
     obj.test_login()
     obj.test_change_module()
